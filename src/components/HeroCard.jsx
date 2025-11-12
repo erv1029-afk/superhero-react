@@ -1,5 +1,4 @@
-import React from 'react';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { HeroContext } from '../context/HeroContext';
 
 function HeroCard({ hero }) {
@@ -11,7 +10,15 @@ function HeroCard({ hero }) {
 
   return (
     <div className="hero-card" onClick={handleSelect}>
-      <img src={hero.image.url} alt={hero.name} className="hero-image" />
+      <img
+        src={hero.image.url}
+        alt={hero.name}
+        className="hero-image"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = '/images/default_superhero.png';
+        }}
+      />
       <h2 className="hero-name">{hero.name}</h2>
       <div className="hero-stats">
         <p><strong>Intelligence:</strong> {hero.powerstats.intelligence}</p>

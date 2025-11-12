@@ -6,11 +6,9 @@ function SearchBar() {
   const inputRef = useRef(null);
   const { dispatch } = useContext(HeroContext);
 
-
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
-
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -24,7 +22,7 @@ function SearchBar() {
     dispatch({ type: 'FETCH_START' });
     try {
       const res = await fetch(
-        `https://superheroapi.com/api/${process.env.REACT_APP_SUPERHERO_TOKEN}/search/${query}`
+        `https://cors-anywhere.herokuapp.com/https://superheroapi.com/api/${import.meta.env.VITE_SUPERHERO_TOKEN}/search/${query}`
       );
       const data = await res.json();
       if (data.response === 'success') {
