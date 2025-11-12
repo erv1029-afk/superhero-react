@@ -30,7 +30,7 @@ Absolutely, Emily — you should include your Netlify link in your README to sho
 
 🚀 Live Demo
 Check out the deployed app here:
-https://storied-twilight-307dca.netlify.app
+https://storied-twilight-307dca.netlify.app/
 
 
 
