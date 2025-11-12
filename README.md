@@ -25,3 +25,13 @@ REACT_APP_SUPERHERO_TOKEN=your_api_token_here
 npm run dev
 5. 	Search for a hero
 Type a name (e.g., "Batman") and explore their stats!
+
+Absolutely, Emily — you should include your Netlify link in your README to showcase the live version of your app. Here's a cozy, learner-friendly section you can copy and paste into your README:
+
+🚀 Live Demo
+Check out the deployed app here:
+https://storied-twilight-307dca.netlify.app
+
+
+
+
