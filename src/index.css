@@ -108,8 +108,7 @@ html, body {
 
 
 .hero-image[src="/images/default_superhero.jpg"] {
-  filter: grayscale(100%);
-  border: 2px dashed crimson;
-  opacity: 0.8;
-  object-fit: cover;
+ width: 200 px;
+ height: auto;
+object-fit: contain;
 }

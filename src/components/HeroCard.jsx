@@ -8,16 +8,21 @@ function HeroCard({ hero }) {
     dispatch({ type: 'SELECT_HERO', payload: hero });
   };
 
+  const handleImageError = (e) => {
+    const fallbackPath = '/images/default_superhero.jpg';
+    if (!e.target.src.includes(fallbackPath)) {
+      e.target.onerror = null;
+      e.target.src = fallbackPath;
+    }
+  };
+
   return (
     <div className="hero-card" onClick={handleSelect}>
       <img
         src={hero.image.url}
         alt={hero.name}
         className="hero-image"
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = '/images/default_superhero.png';
-        }}
+        onError={handleImageError}
       />
       <h2 className="hero-name">{hero.name}</h2>
       <div className="hero-stats">
