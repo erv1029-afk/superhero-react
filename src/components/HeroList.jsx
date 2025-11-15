@@ -8,20 +8,19 @@ function HeroList() {
   const { state } = useContext(HeroContext);
   const { heroes, loading, error } = state;
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
+  if (error) return <Error message={error} />;
 
-  if (error) {
-    return <Error message={error} />;
-  }
-
-  if (!heroes || heroes.length === 0) {
-    return <p className="no-results">No heroes found. Try a different search!</p>;
+  if (!heroes?.length) {
+    return (
+      <p className="no-results" role="alert">
+        No heroes found. Try a different search!
+      </p>
+    );
   }
 
   return (
-    <div className="hero-list">
+    <div className="hero-list" aria-label="List of matching superheroes">
       {heroes.map((hero) => (
         <HeroCard key={hero.id} hero={hero} />
       ))}

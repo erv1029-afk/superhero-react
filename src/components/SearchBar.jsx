@@ -11,31 +11,30 @@ function SearchBar() {
   }, []);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
+    if (e.key === 'Enter') handleSearch();
   };
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    const trimmedQuery = query.trim().toLowerCase();
+    if (!trimmedQuery) return;
 
     dispatch({ type: 'FETCH_START' });
 
     try {
-      const res = await fetch('https://akabab.github.io/superhero-api/api/all.json');
-      const allHeroes = await res.json();
+      const response = await fetch('https://akabab.github.io/superhero-api/api/all.json');
+      const heroes = await response.json();
 
-      const filtered = allHeroes.filter((hero) =>
-        hero.name.toLowerCase().includes(query.trim().toLowerCase())
+      const results = heroes.filter((hero) =>
+        hero.name.toLowerCase().includes(trimmedQuery)
       );
 
-      if (filtered.length > 0) {
-        dispatch({ type: 'FETCH_SUCCESS', payload: filtered });
+      if (results.length) {
+        dispatch({ type: 'FETCH_SUCCESS', payload: results });
       } else {
-        dispatch({ type: 'FETCH_ERROR', payload: 'No heroes found.' });
+        dispatch({ type: 'FETCH_ERROR', payload: `No heroes found for "${query}".` });
       }
-    } catch (err) {
-      dispatch({ type: 'FETCH_ERROR', payload: err.message });
+    } catch (error) {
+      dispatch({ type: 'FETCH_ERROR', payload: `Search failed: ${error.message}` });
     }
   };
 
@@ -48,6 +47,7 @@ function SearchBar() {
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Search for a hero..."
+        aria-label="Hero search input"
       />
       <button
         className="search-button"

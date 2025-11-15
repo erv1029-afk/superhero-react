@@ -19,16 +19,16 @@ function HeroCard({ hero }) {
   return (
     <div className="hero-card" onClick={handleSelect}>
       <img
-        src={hero.image.url}
+        src={hero.images?.md || '/images/default_superhero.jpg'}
         alt={hero.name}
         className="hero-image"
         onError={handleImageError}
       />
       <h2 className="hero-name">{hero.name}</h2>
       <div className="hero-stats">
-        <p><strong>Intelligence:</strong> {hero.powerstats.intelligence}</p>
-        <p><strong>Strength:</strong> {hero.powerstats.strength}</p>
-        <p><strong>Speed:</strong> {hero.powerstats.speed}</p>
+        <p><strong>Intelligence:</strong> {hero.powerstats?.intelligence ?? 'N/A'}</p>
+        <p><strong>Strength:</strong> {hero.powerstats?.strength ?? 'N/A'}</p>
+        <p><strong>Speed:</strong> {hero.powerstats?.speed ?? 'N/A'}</p>
       </div>
     </div>
   );
