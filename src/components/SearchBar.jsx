@@ -20,15 +20,19 @@ function SearchBar() {
     if (!query.trim()) return;
 
     dispatch({ type: 'FETCH_START' });
+
     try {
-      const res = await fetch(
-        `https://cors-anywhere.herokuapp.com/https://superheroapi.com/api/${import.meta.env.VITE_SUPERHERO_TOKEN}/search/${query}`
+      const res = await fetch('https://akabab.github.io/superhero-api/api/all.json');
+      const allHeroes = await res.json();
+
+      const filtered = allHeroes.filter((hero) =>
+        hero.name.toLowerCase().includes(query.trim().toLowerCase())
       );
-      const data = await res.json();
-      if (data.response === 'success') {
-        dispatch({ type: 'FETCH_SUCCESS', payload: data.results });
+
+      if (filtered.length > 0) {
+        dispatch({ type: 'FETCH_SUCCESS', payload: filtered });
       } else {
-        dispatch({ type: 'FETCH_ERROR', payload: data.error });
+        dispatch({ type: 'FETCH_ERROR', payload: 'No heroes found.' });
       }
     } catch (err) {
       dispatch({ type: 'FETCH_ERROR', payload: err.message });
