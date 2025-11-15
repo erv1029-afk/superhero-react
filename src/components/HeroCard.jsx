@@ -17,10 +17,19 @@ function HeroCard({ hero }) {
   };
 
   return (
-    <div className="hero-card" onClick={handleSelect}>
+    <div
+      className="hero-card"
+      role="button"
+      tabIndex={0}
+      onClick={handleSelect}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleSelect();
+      }}
+      aria-label={`Select ${hero.name}`}
+    >
       <img
         src={hero.images?.md || '/images/default_superhero.jpg'}
-        alt={hero.name}
+        alt={`Portrait of ${hero.name}`}
         className="hero-image"
         onError={handleImageError}
       />

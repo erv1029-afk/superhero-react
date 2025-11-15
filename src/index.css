@@ -69,6 +69,53 @@ html, body {
 }
 
 
+.hero-card {
+  background-color: #1a1a1a;
+  border: 2px solid crimson;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 220px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.hero-card:hover,
+.hero-card:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(255, 64, 129, 0.5);
+}
+
+.hero-card:focus {
+  border-color: #ff4081;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.hero-image[src="/images/default_superhero.jpg"] {
+  width: 200px;
+  object-fit: contain;
+}
+
+
+.hero-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #ff4081;
+}
+
+.hero-stats p {
+  font-size: 1rem;
+  margin: 0.25rem 0;
+}
+
+
 .loader-container {
   display: flex;
   flex-direction: column;
@@ -99,19 +146,12 @@ html, body {
   margin-top: 2rem;
 }
 
-
 .no-results {
   font-size: 1.5rem;
   color: #ccc;
   margin-top: 2rem;
 }
 
-
-.hero-image[src="/images/default_superhero.jpg"] {
- width: 200 px;
- height: auto;
-object-fit: contain;
-}
 
 .app-footer {
   text-align: center;

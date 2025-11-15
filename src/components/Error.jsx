@@ -4,7 +4,7 @@ function Error({ message }) {
   if (!message) return null;
 
   return (
-    <div className="error-container">
+    <div className="error-container" role="alert" aria-live="assertive">
       <h2>⚠️ Something went wrong</h2>
       <p>{message}</p>
     </div>
