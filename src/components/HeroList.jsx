@@ -8,6 +8,7 @@ function HeroList({ setHeroA, setHeroB, heroA, heroB }) {
   const { state } = useContext(HeroContext);
   const { heroes = [], loading, error } = state;
 
+  // 🦸 Selection logic: lock in heroA first, then heroB (if distinct)
   const handleSelect = (hero) => {
     if (!heroA) {
       setHeroA(hero);
@@ -16,6 +17,7 @@ function HeroList({ setHeroA, setHeroB, heroA, heroB }) {
     }
   };
 
+  // 🧹 Clear both selections
   const handleClearSelection = () => {
     setHeroA(null);
     setHeroB(null);

@@ -8,11 +8,13 @@ function App() {
   const [heroA, setHeroA] = useState(null);
   const [heroB, setHeroB] = useState(null);
 
+  // 🧹 Clear both selected heroes
   const handleClear = () => {
     setHeroA(null);
     setHeroB(null);
   };
 
+  // 🧠 Debug: log selected heroes on change
   useEffect(() => {
     console.log('Hero A:', heroA?.name);
     console.log('Hero B:', heroB?.name);
