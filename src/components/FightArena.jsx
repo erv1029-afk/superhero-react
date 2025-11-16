@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import { simulateFight } from '../utils/simulateFight';
 import BattleNarration from './BattleNarration';
 
+const fallbackHero = {
+  name: 'Unknown Hero',
+  image: { url: '/images/default_superhero.jpg' },
+};
+
 const FightArena = ({ heroA, heroB, onClear }) => {
   const [result, setResult] = useState(null);
 
   const handleFight = () => {
+    if (!heroA || !heroB) {
+      console.warn('Both heroes must be selected before fighting.');
+      return;
+    }
+
     const fight = simulateFight(heroA, heroB);
     setResult(fight);
   };
@@ -13,6 +23,8 @@ const FightArena = ({ heroA, heroB, onClear }) => {
   const handleRematch = () => {
     handleFight();
   };
+
+  const winner = result?.winner || fallbackHero;
 
   return (
     <div className="fight-arena">
@@ -27,11 +39,14 @@ const FightArena = ({ heroA, heroB, onClear }) => {
       {result && (
         <div className="battle-result">
           <div className="winner-card">
-            <h2>🏆 {result.winner.name} wins!</h2>
-            <img src={result.winner.image.url} alt={result.winner.name} />
+            <h2>🏆 {winner.name} wins!</h2>
+            <img
+              src={winner.image?.url || '/images/default_superhero.jpg'}
+              alt={winner.name || 'Unknown Hero'}
+            />
           </div>
 
-          <BattleNarration description={result.description} />
+          <BattleNarration description={result.description || 'An epic clash unfolded...'} />
 
           <div className="fight-controls">
             <button onClick={handleRematch}>🔁 Rematch</button>
