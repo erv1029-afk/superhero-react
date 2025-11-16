@@ -6,34 +6,72 @@ function App() {
   const [heroes, setHeroes] = useState([]);
   const [error, setError] = useState('');
 
-  }
-
- const handleSearch = async () => {
-  console.log('Search triggered'); // 👈 Add this
-
-  if (!searchTerm.trim()) {
-    setHeroes([]);
-    setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
-    return;
-  }
-
-  try {
+  const fetchHeroes = async () => {
     const response = await fetch('https://akabab.github.io/superhero-api/api/all.json');
-    const data = await response.json();
-    console.log('Fetched data:', data); 
+    return await response.json();
+  };
 
-    const filtered = data.filter(hero =>
-      hero.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const handleSearch = async () => {
+    console.log('Search triggered');
 
-    setHeroes(filtered);
-    setError(filtered.length === 0 ? 'NO HEROES FOUND. TRY A DIFFERENT SEARCH!' : '');
-  } catch (err) {
-    console.error('Fetch error:', err);
-    setHeroes([]);
-    setError('Something went wrong. Please try again.');
-  }
-};
+    if (!searchTerm.trim()) {
+      setHeroes([]);
+      setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
+      return;
+    }
+
+    try {
+      const data = await fetchHeroes();
+      console.log('Fetched data:', data);
+
+      const filtered = data.filter(hero =>
+        hero.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setHeroes(filtered);
+      setError(filtered.length === 0 ? 'NO HEROES FOUND. TRY A DIFFERENT SEARCH!' : '');
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setHeroes([]);
+      setError('Something went wrong. Please try again.');
+    }
+  };
+
+  const handleMarvel = async () => {
+    try {
+      const data = await fetchHeroes();
+      const marvelHeroes = data.filter(hero => hero.biography.publisher === 'Marvel Comics');
+      setHeroes(marvelHeroes);
+      setError(marvelHeroes.length === 0 ? 'No Marvel heroes found.' : '');
+    } catch (err) {
+      setHeroes([]);
+      setError('Something went wrong. Please try again.');
+    }
+  };
+
+  const handleDC = async () => {
+    try {
+      const data = await fetchHeroes();
+      const dcHeroes = data.filter(hero => hero.biography.publisher === 'DC Comics');
+      setHeroes(dcHeroes);
+      setError(dcHeroes.length === 0 ? 'No DC heroes found.' : '');
+    } catch (err) {
+      setHeroes([]);
+      setError('Something went wrong. Please try again.');
+    }
+  };
+
+  const handleRandom = async () => {
+    try {
+      const data = await fetchHeroes();
+      const randomHero = data[Math.floor(Math.random() * data.length)];
+      setHeroes([randomHero]);
+      setError('');
+    } catch (err) {
+      setHeroes([]);
+      setError('Something went wrong. Please try again.');
+    }
+  };
 
   return (
     <div className="app-container">
@@ -53,9 +91,9 @@ function App() {
       </div>
 
       <div className="button-container">
-        <button className="marvel-button">Marvel</button>
-        <button className="dc-button">DC</button>
-        <button className="randomizer-button">Random</button>
+        <button className="marvel-button" onClick={handleMarvel}>Marvel</button>
+        <button className="dc-button" onClick={handleDC}>DC</button>
+        <button className="randomizer-button" onClick={handleRandom}>Random</button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
