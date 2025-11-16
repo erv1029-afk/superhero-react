@@ -1,92 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { simulateFight } from '../utils/simulateFight';
-import BattleNarration from './BattleNarration';
-import HeroCard from './HeroCard'; // Needed for lock-in preview
+import { useEffect } from 'react';
+import { useHeroContext } from '../context/HeroContext';
+import { fetchHeroData } from '../api/heroData';
+import HeroList from './HeroList';
+import WinnerCard from './WinnerCard';
+import Error from './Error';
+import Loader from './Loader';
 
-const fallbackHero = {
-  name: 'Unknown Hero',
-  images: { md: '/images/default_superhero.jpg' },
-};
-
-const FightArena = ({ heroA, heroB, onClear }) => {
-  const [result, setResult] = useState(null);
-  const [canFight, setCanFight] = useState(false);
+export default function FightArena() {
+  const { state, dispatch } = useHeroContext();
+  const { hero1, hero2, winner, heroes, loading, error } = state;
 
   useEffect(() => {
-    const validA = heroA?.images?.md;
-    const validB = heroB?.images?.md;
-    setCanFight(Boolean(validA && validB));
-  }, [heroA, heroB]);
-
-  const handleFight = () => {
-    if (!canFight) {
-      console.warn('Both heroes must be selected and valid before fighting.');
-      return;
+    async function loadHeroes() {
+      dispatch({ type: 'SET_LOADING', payload: true });
+      try {
+        const data = await fetchHeroData();
+        dispatch({ type: 'SET_HERO_LIST', payload: data });
+      } catch (err) {
+        dispatch({ type: 'SET_ERROR', payload: 'Failed to load hero data.' });
+      } finally {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
     }
+    loadHeroes();
+  }, [dispatch]);
 
-    const fight = simulateFight(heroA, heroB);
-    setResult(fight);
-  };
+  useEffect(() => {
+    if (hero1 && hero2) {
+      dispatch({ type: 'CALCULATE_WINNER' });
+    }
+  }, [hero1, hero2, dispatch]);
 
-  const handleRematch = () => {
-    handleFight();
-  };
-
-  const winner = result?.winner || fallbackHero;
-  const winnerImage = winner?.images?.md || fallbackHero.images.md;
+  if (loading) return <Loader />;
+  if (error) return <Error message={error} />;
 
   return (
-    <div className="fight-arena">
-      {/* 🧙‍♂️ Choose your rival prompt */}
-      {heroA && !heroB && !result && (
-        <p className="choose-rival" aria-live="polite">
-          🧙‍♂️ Choose your rival to begin the battle!
-        </p>
-      )}
+    <div className="arena">
+      <h2>Choose Your Fighters</h2>
 
-      {/* 🦸 Lock-in preview panel */}
-      {(heroA || heroB) && !result && (
-        <div className="locked-in-panel">
-          {heroA && <HeroCard hero={heroA} isSelected />}
-          {heroB && <HeroCard hero={heroB} isSelected />}
-        </div>
-      )}
+      <HeroList
+        heroA={hero1}
+        heroB={hero2}
+        setHeroA={hero => dispatch({ type: 'SET_HERO_1', payload: hero })}
+        setHeroB={hero => dispatch({ type: 'SET_HERO_2', payload: hero })}
+      />
 
-      {/* 🆚 VS Banner */}
-      {heroA && heroB && !result && (
-        <div className="vs-banner">
-          <h2>{heroA.name} 💥 VS 💥 {heroB.name}</h2>
-        </div>
-      )}
-
-      {/* ⚔️ Fight Button */}
-      {canFight && !result && (
-        <div className="fight-controls">
-          <button onClick={handleFight}>⚔️ Fight!</button>
-        </div>
-      )}
-
-      {/* 🏆 Fight Result */}
-      {result && (
-        <div className="battle-result winner-reveal">
-          <div className="winner-card">
-            <h2>🏆 {winner.name} wins!</h2>
-            <img
-              src={winnerImage}
-              alt={winner.name || 'Unknown Hero'}
-            />
-          </div>
-
-          <BattleNarration description={result.description || 'An epic clash unfolded...'} />
-
-          <div className="fight-controls">
-            <button onClick={handleRematch}>🔁 Rematch</button>
-            <button onClick={onClear}>🧹 Clear</button>
-          </div>
-        </div>
-      )}
+      {winner && <WinnerCard hero={winner} />}
     </div>
   );
-};
-
-export default FightArena;
+}

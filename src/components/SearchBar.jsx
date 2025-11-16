@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { HeroContext } from '../context/HeroContext';
+import { fetchHeroData } from '../api/heroData';
 
 function SearchBar() {
   const [query, setQuery] = useState('');
@@ -18,27 +19,28 @@ function SearchBar() {
     const trimmedQuery = query.trim().toLowerCase();
     if (!trimmedQuery) return;
 
-    dispatch({ type: 'FETCH_START' });
+    dispatch({ type: 'SET_LOADING', payload: true });
 
     try {
-      const response = await fetch('https://akabab.github.io/superhero-api/api/all.json');
-      const heroes = await response.json();
-
-      const results = heroes.filter((hero) =>
+      const allHeroes = await fetchHeroData();
+      const filtered = allHeroes.filter(hero =>
         hero.name.toLowerCase().includes(trimmedQuery)
       );
 
-      dispatch({
-        type: results.length ? 'FETCH_SUCCESS' : 'FETCH_ERROR',
-        payload: results.length
-          ? results
-          : `No heroes found for "${query}".`,
-      });
+      if (filtered.length) {
+        dispatch({ type: 'SET_HERO_LIST', payload: filtered });
+        dispatch({ type: 'SET_ERROR', payload: '' });
+      } else {
+        dispatch({ type: 'SET_HERO_LIST', payload: [] });
+        dispatch({ type: 'SET_ERROR', payload: `No heroes found for "${query}".` });
+      }
     } catch (error) {
       dispatch({
-        type: 'FETCH_ERROR',
+        type: 'SET_ERROR',
         payload: `Search failed: ${error.message}`,
       });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   };
 

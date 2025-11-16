@@ -1,12 +1,12 @@
 import React from 'react';
 
 function HeroCard({ hero = {}, onClick, isSelected = false }) {
-  const fallbackPath = '/images/default_superhero.jpg';
+  const fallbackImage = '/images/default_superhero.jpg';
 
   const handleImageError = (e) => {
-    if (!e.target.src.includes(fallbackPath)) {
+    if (!e.target.src.includes(fallbackImage)) {
       e.target.onerror = null;
-      e.target.src = fallbackPath;
+      e.target.src = fallbackImage;
     }
   };
 
@@ -17,32 +17,36 @@ function HeroCard({ hero = {}, onClick, isSelected = false }) {
     }
   };
 
-  const imageSrc = hero?.images?.md || fallbackPath;
-  const heroName = hero?.name || 'Unknown Hero';
-  const stats = hero?.powerstats || {};
+  const {
+    name = 'Unknown Hero',
+    images = {},
+    powerstats = {},
+  } = hero;
+
+  const imageSrc = images.md || fallbackImage;
 
   return (
     <div
       className={`hero-card ${isSelected ? 'selected' : ''}`}
       role="button"
       tabIndex={0}
-      title={`Click to select ${heroName}`}
+      title={`Click to select ${name}`}
       onClick={onClick}
       onKeyDown={handleKeyDown}
-      aria-label={`Select ${heroName}`}
+      aria-label={`Select ${name}`}
       data-selected={isSelected}
     >
       <img
         src={imageSrc}
-        alt={`Portrait of ${heroName}`}
+        alt={`Portrait of ${name}`}
         className="hero-image"
         onError={handleImageError}
       />
-      <h2 className="hero-name">{heroName}</h2>
+      <h2 className="hero-name">{name}</h2>
       <ul className="hero-stats" aria-label="Power stats">
-        <li><strong>Intelligence:</strong> {stats.intelligence ?? 'N/A'}</li>
-        <li><strong>Strength:</strong> {stats.strength ?? 'N/A'}</li>
-        <li><strong>Speed:</strong> {stats.speed ?? 'N/A'}</li>
+        <li><strong>Intelligence:</strong> {powerstats.intelligence ?? 'N/A'}</li>
+        <li><strong>Strength:</strong> {powerstats.strength ?? 'N/A'}</li>
+        <li><strong>Speed:</strong> {powerstats.speed ?? 'N/A'}</li>
       </ul>
     </div>
   );

@@ -1,21 +1,21 @@
-import React from 'react';
-
-const WinnerCard = ({ winner }) => {
-  if (!winner) return null;
-
-  const imageSrc = winner?.image || '/images/default_superhero.jpg';
-  const winnerName = winner?.name || 'Unknown Hero';
+export default function WinnerCard({ hero }) {
+  if (!hero) return null;
 
   return (
-    <div className="winner-card" role="region" aria-label={`Winner: ${winnerName}`}>
-      <h2 className="winner-name">🏆 {winnerName} wins!</h2>
-      <img
-        src={imageSrc}
-        alt={`Portrait of ${winnerName}`}
-        className="winner-image"
-      />
+    <div
+      className="winner-card"
+      role="status"
+      aria-live="polite"
+      data-winner={hero.name}
+    >
+      <h2 className="winner-announcement">🏆 {hero.name} wins the fight!</h2>
+      {hero.images?.md && (
+        <img
+          src={hero.images.md}
+          alt={`Portrait of ${hero.name}`}
+          className="winner-image"
+        />
+      )}
     </div>
   );
-};
-
-export default WinnerCard;
+}

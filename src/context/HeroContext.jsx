@@ -1,46 +1,55 @@
-import React, { createContext, useReducer } from 'react';
+import { createContext, useReducer, useContext } from 'react';
+import { simulateFight } from '../utils/simulateFight';
 
-export const HeroContext = createContext();
+const HeroContext = createContext();
 
-// 🧠 Initial global state
 const initialState = {
-  heroes: [],
-  loading: false,
-  error: null,
-  selectedHero: null,
-  selectedHeroDetails: null,
+  heroes: [],       // full hero list from API
+  hero1: null,      // selected fighter A
+  hero2: null,      // selected fighter B
+  winner: null,     // fight result
+  loading: false,   // loading state
+  error: '',        // error message
 };
 
-// ⚙️ Reducer logic
-function reducer(state, action) {
+function heroReducer(state, action) {
   switch (action.type) {
-    case 'FETCH_START':
-      return { ...state, loading: true, error: null };
+    case 'SET_HERO_LIST':
+      return { ...state, heroes: action.payload };
 
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, heroes: action.payload };
+    case 'SET_HERO_1':
+      return { ...state, hero1: action.payload, hero2: null, winner: null };
 
-    case 'FETCH_ERROR':
-      return { ...state, loading: false, error: action.payload };
+    case 'SET_HERO_2':
+      return { ...state, hero2: action.payload };
 
-    case 'SELECT_HERO':
-      return { ...state, selectedHero: action.payload };
+    case 'CALCULATE_WINNER':
+      const winner = simulateFight(state.hero1, state.hero2);
+      return { ...state, winner };
 
-    case 'FETCH_DETAILS_SUCCESS':
-      return { ...state, selectedHeroDetails: action.payload };
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
+
+    case 'SET_ERROR':
+      return { ...state, error: action.payload };
+
+    case 'RESET':
+      return initialState;
 
     default:
       return state;
   }
 }
 
-// 🌐 Context provider
 export function HeroProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [state, dispatch] = useReducer(heroReducer, initialState);
   return (
     <HeroContext.Provider value={{ state, dispatch }}>
       {children}
     </HeroContext.Provider>
   );
+}
+
+export function useHeroContext() {
+  return useContext(HeroContext);
 }
