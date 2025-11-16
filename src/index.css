@@ -12,10 +12,12 @@ html, body {
   overflow-x: hidden;
 }
 
+
 .app-container {
   padding: 2rem;
   text-align: center;
 }
+
 
 .app-title {
   font-size: 4rem;
@@ -30,20 +32,13 @@ html, body {
   to { opacity: 1; transform: scale(1.05); }
 }
 
+
 .search-bar {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-}
-
-.button-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
 }
 
 .search-input {
@@ -56,6 +51,16 @@ html, body {
   color: #fff;
   box-shadow: 0 0 10px #ff0000;
 }
+
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 
 .search-button,
 .marvel-button,
@@ -95,6 +100,7 @@ html, body {
   box-shadow: 0 0 15px #ff4081;
 }
 
+
 .hero-list {
   display: flex;
   flex-wrap: wrap;
@@ -102,6 +108,7 @@ html, body {
   gap: 2rem;
   padding: 2rem;
 }
+
 
 .hero-card {
   background: linear-gradient(145deg, #1a1a1a, #2c0e0e);
@@ -126,6 +133,7 @@ html, body {
   box-shadow: 0 0 25px gold;
 }
 
+
 .hero-image {
   width: 100%;
   height: auto;
@@ -148,6 +156,7 @@ html, body {
   color: #ccc;
 }
 
+
 .spinner {
   width: 60px;
   height: 60px;
@@ -162,6 +171,7 @@ html, body {
   to { transform: rotate(360deg); }
 }
 
+
 .error-message {
   color: #ff4d4d;
   font-size: 1.4rem;
@@ -174,6 +184,7 @@ html, body {
   color: #999;
   margin-top: 2rem;
 }
+
 
 .app-footer {
   text-align: center;
