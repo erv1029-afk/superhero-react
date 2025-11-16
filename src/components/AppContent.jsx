@@ -11,24 +11,30 @@ function AppContent() {
 
   return (
     <main className="app-container">
-      <header>
+      <header className="app-header">
         <h1 className="app-title">Superhero Search</h1>
       </header>
 
       <section className="controls-section">
-        <HeroFilterBar
-          selectedUniverse={selectedUniverse}
-          onFilterChange={(universe) =>
-            dispatch({ type: 'SET_UNIVERSE', payload: universe })
-          }
-        />
-        <SearchBar />
+        <div className="filter-bar-wrapper">
+          <HeroFilterBar
+            selectedUniverse={selectedUniverse}
+            onFilterChange={(universe) =>
+              dispatch({ type: 'SET_UNIVERSE', payload: universe })
+            }
+          />
+        </div>
+
+        <div className="search-bar-wrapper">
+          <SearchBar />
+        </div>
       </section>
 
-      {loading && <Loader />}
-      {error && <Error message={error} />}
-
-      <HeroList heroes={heroes} />
+      <section className="results-section">
+        {loading && <Loader />}
+        {error && <Error message={error} />}
+        {!loading && !error && <HeroList heroes={heroes} />}
+      </section>
 
       <footer className="app-footer">
         Built with comic-book flair by Emily ✨
