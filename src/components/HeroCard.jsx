@@ -1,13 +1,6 @@
-import React, { useContext } from 'react';
-import { HeroContext } from '../context/HeroContext';
+import React from 'react';
 
-function HeroCard({ hero }) {
-  const { dispatch } = useContext(HeroContext);
-
-  const handleSelect = () => {
-    dispatch({ type: 'SELECT_HERO', payload: hero });
-  };
-
+function HeroCard({ hero, onClick }) {
   const handleImageError = (e) => {
     const fallbackPath = '/images/default_superhero.jpg';
     if (!e.target.src.includes(fallbackPath)) {
@@ -21,9 +14,9 @@ function HeroCard({ hero }) {
       className="hero-card"
       role="button"
       tabIndex={0}
-      onClick={handleSelect}
+      onClick={onClick}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') handleSelect();
+        if (e.key === 'Enter' || e.key === ' ') onClick();
       }}
       aria-label={`Select ${hero.name}`}
     >

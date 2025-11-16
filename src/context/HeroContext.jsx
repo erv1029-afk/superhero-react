@@ -8,6 +8,9 @@ const initialState = {
   error: null,
   selectedHero: null,
   selectedHeroDetails: null,
+  heroA: null,
+  heroB: null,
+  fightResult: null,
 };
 
 function reducer(state, action) {
@@ -21,7 +24,15 @@ function reducer(state, action) {
     case 'SELECT_HERO':
       return { ...state, selectedHero: action.payload };
     case 'FETCH_DETAILS_SUCCESS':
-      return { ...state, selectedHeroDetails: action.payload }; // ← this line!
+      return { ...state, selectedHeroDetails: action.payload };
+    case 'SET_HERO_A':
+      return { ...state, heroA: action.payload };
+    case 'SET_HERO_B':
+      return { ...state, heroB: action.payload };
+    case 'SET_FIGHT_RESULT':
+      return { ...state, fightResult: action.payload };
+    case 'CLEAR_FIGHT':
+      return { ...state, heroA: null, heroB: null, fightResult: null };
     default:
       return state;
   }
