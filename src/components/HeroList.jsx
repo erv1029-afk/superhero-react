@@ -24,14 +24,6 @@ function HeroList({ setHeroA, setHeroB, heroA, heroB }) {
   if (loading) return <Loader />;
   if (error) return <Error message={error} />;
 
-  if (!heroes.length) {
-    return (
-      <p className="no-results" role="alert" aria-live="assertive">
-        🕵️‍♀️ No heroes found. Try a different search or summon a new legend!
-      </p>
-    );
-  }
-
   return (
     <section
       className="hero-list"
@@ -49,19 +41,29 @@ function HeroList({ setHeroA, setHeroB, heroA, heroB }) {
         </div>
       )}
 
-      {/* 🦸 Hero Cards */}
-      {heroes.map((hero) => {
-        const isSelected = hero.id === heroA?.id || hero.id === heroB?.id;
+      {/* 🦸 Selected Heroes Preview */}
+      {(heroA || heroB) && (
+        <div className="selected-heroes" aria-label="Selected heroes">
+          {heroA && <HeroCard hero={heroA} isSelected />}
+          {heroB && <HeroCard hero={heroB} isSelected />}
+        </div>
+      )}
 
-        return (
-          <HeroCard
-            key={hero.id}
-            hero={hero}
-            onClick={() => handleSelect(hero)}
-            isSelected={isSelected}
-          />
-        );
-      })}
+      {/* 🦸 Hero Cards from Search Results */}
+      <div className="search-results">
+        {heroes.map((hero) => {
+          const isSelected = hero.id === heroA?.id || hero.id === heroB?.id;
+
+          return (
+            <HeroCard
+              key={hero.id}
+              hero={hero}
+              onClick={() => handleSelect(hero)}
+              isSelected={isSelected}
+            />
+          );
+        })}
+      </div>
     </section>
   );
 }

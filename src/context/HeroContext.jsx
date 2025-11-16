@@ -9,9 +9,6 @@ const initialState = {
   error: null,
   selectedHero: null,
   selectedHeroDetails: null,
-  heroA: null,
-  heroB: null,
-  fightResult: null,
 };
 
 // ⚙️ Reducer logic
@@ -31,18 +28,6 @@ function reducer(state, action) {
 
     case 'FETCH_DETAILS_SUCCESS':
       return { ...state, selectedHeroDetails: action.payload };
-
-    case 'SET_HERO_A':
-      return { ...state, heroA: action.payload };
-
-    case 'SET_HERO_B':
-      return { ...state, heroB: action.payload };
-
-    case 'SET_FIGHT_RESULT':
-      return { ...state, fightResult: action.payload };
-
-    case 'CLEAR_FIGHT':
-      return { ...state, heroA: null, heroB: null, fightResult: null };
 
     default:
       return state;

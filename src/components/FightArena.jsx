@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { simulateFight } from '../utils/simulateFight';
 import BattleNarration from './BattleNarration';
+import HeroCard from './HeroCard'; // Needed for lock-in preview
 
 const fallbackHero = {
   name: 'Unknown Hero',
-  images: { md: '/images/default_superhero.jpg' }, 
+  images: { md: '/images/default_superhero.jpg' },
 };
 
 const FightArena = ({ heroA, heroB, onClear }) => {
   const [result, setResult] = useState(null);
   const [canFight, setCanFight] = useState(false);
 
-  // ✅ Check if both heroes are valid and have image paths
   useEffect(() => {
     const validA = heroA?.images?.md;
     const validB = heroB?.images?.md;
@@ -37,6 +37,21 @@ const FightArena = ({ heroA, heroB, onClear }) => {
 
   return (
     <div className="fight-arena">
+      {/* 🧙‍♂️ Choose your rival prompt */}
+      {heroA && !heroB && !result && (
+        <p className="choose-rival" aria-live="polite">
+          🧙‍♂️ Choose your rival to begin the battle!
+        </p>
+      )}
+
+      {/* 🦸 Lock-in preview panel */}
+      {(heroA || heroB) && !result && (
+        <div className="locked-in-panel">
+          {heroA && <HeroCard hero={heroA} isSelected />}
+          {heroB && <HeroCard hero={heroB} isSelected />}
+        </div>
+      )}
+
       {/* 🆚 VS Banner */}
       {heroA && heroB && !result && (
         <div className="vs-banner">
@@ -53,7 +68,7 @@ const FightArena = ({ heroA, heroB, onClear }) => {
 
       {/* 🏆 Fight Result */}
       {result && (
-        <div className="battle-result">
+        <div className="battle-result winner-reveal">
           <div className="winner-card">
             <h2>🏆 {winner.name} wins!</h2>
             <img
