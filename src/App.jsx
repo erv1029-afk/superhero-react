@@ -6,28 +6,34 @@ function App() {
   const [heroes, setHeroes] = useState([]);
   const [error, setError] = useState('');
 
-  const handleSearch = async () => {
-    if (!searchTerm.trim()) {
-      setHeroes([]);
-      setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
-      return;
-    }
+  }
 
-    try {
-      const response = await fetch('https://akabab.github.io/superhero-api/api/all.json');
-      const data = await response.json();
+ const handleSearch = async () => {
+  console.log('Search triggered'); // 👈 Add this
 
-      const filtered = data.filter(hero =>
-        hero.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  if (!searchTerm.trim()) {
+    setHeroes([]);
+    setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
+    return;
+  }
 
-      setHeroes(filtered);
-      setError(filtered.length === 0 ? 'NO HEROES FOUND. TRY A DIFFERENT SEARCH!' : '');
-    } catch (err) {
-      setHeroes([]);
-      setError('Something went wrong. Please try again.');
-    }
-  };
+  try {
+    const response = await fetch('https://akabab.github.io/superhero-api/api/all.json');
+    const data = await response.json();
+    console.log('Fetched data:', data); 
+
+    const filtered = data.filter(hero =>
+      hero.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setHeroes(filtered);
+    setError(filtered.length === 0 ? 'NO HEROES FOUND. TRY A DIFFERENT SEARCH!' : '');
+  } catch (err) {
+    console.error('Fetch error:', err);
+    setHeroes([]);
+    setError('Something went wrong. Please try again.');
+  }
+};
 
   return (
     <div className="app-container">
