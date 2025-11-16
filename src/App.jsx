@@ -18,9 +18,7 @@ function App() {
     }
   };
 
-  const handleRematch = () => {
-    handleFight();
-  };
+  const handleRematch = () => handleFight();
 
   const handleClear = () => {
     setHeroA(null);
@@ -28,21 +26,20 @@ function App() {
     setFightResult(null);
   };
 
+  const bothHeroesSelected = !!heroA && !!heroB;
+
   return (
     <HeroProvider>
       <main className="app-container" role="main">
-        
         <header>
           <h1 className="app-title">Superhero Search</h1>
         </header>
 
-        
-        <section className="search-section">
+        <section className="search-section" aria-label="Search for superheroes">
           <SearchBar />
         </section>
 
-        
-        <section className="results-section">
+        <section className="results-section" aria-label="Search results">
           <HeroList
             setHeroA={setHeroA}
             setHeroB={setHeroB}
@@ -51,27 +48,31 @@ function App() {
           />
         </section>
 
-        
-        {heroA && heroB && (
-          <section className="fight-section">
+        {bothHeroesSelected && (
+          <section className="fight-section" aria-label="Fight arena">
             {!fightResult ? (
               <div className="fight-controls">
-                <button onClick={handleFight}>⚔️ Fight!</button>
+                <button onClick={handleFight} aria-label="Start the fight">
+                  ⚔️ Fight!
+                </button>
               </div>
             ) : (
               <>
-                <WinnerCard winner={fightResult.winner} />
-                <BattleNarration description={fightResult.description} />
+                <WinnerCard winner={fightResult?.winner} />
+                <BattleNarration description={fightResult?.description} />
                 <div className="fight-controls">
-                  <button onClick={handleRematch}>🔁 Rematch</button>
-                  <button onClick={handleClear}>🧹 Clear</button>
+                  <button onClick={handleRematch} aria-label="Rematch">
+                    🔁 Rematch
+                  </button>
+                  <button onClick={handleClear} aria-label="Clear selection">
+                    🧹 Clear
+                  </button>
                 </div>
               </>
             )}
           </section>
         )}
 
-       
         <footer className="app-footer">
           <p>
             Powered by{' '}

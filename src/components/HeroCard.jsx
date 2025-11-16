@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HeroCard({ hero, onClick, isSelected = false }) {
+function HeroCard({ hero = {}, onClick, isSelected = false }) {
   const fallbackPath = '/images/default_superhero.jpg';
 
   const handleImageError = (e) => {
@@ -13,32 +13,36 @@ function HeroCard({ hero, onClick, isSelected = false }) {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      onClick();
+      onClick?.();
     }
   };
+
+  const imageSrc = hero?.images?.md || fallbackPath;
+  const heroName = hero?.name || 'Unknown Hero';
+  const stats = hero?.powerstats || {};
 
   return (
     <div
       className={`hero-card ${isSelected ? 'selected' : ''}`}
       role="button"
       tabIndex={0}
-      title={`Click to select ${hero.name}`}
+      title={`Click to select ${heroName}`}
       onClick={onClick}
       onKeyDown={handleKeyDown}
-      aria-label={`Select ${hero.name}`}
+      aria-label={`Select ${heroName}`}
       data-selected={isSelected}
     >
       <img
-        src={hero.images?.md || fallbackPath}
-        alt={`Portrait of ${hero.name}`}
+        src={imageSrc}
+        alt={`Portrait of ${heroName}`}
         className="hero-image"
         onError={handleImageError}
       />
-      <h2 className="hero-name">{hero.name}</h2>
+      <h2 className="hero-name">{heroName}</h2>
       <ul className="hero-stats" aria-label="Power stats">
-        <li><strong>Intelligence:</strong> {hero.powerstats?.intelligence ?? 'N/A'}</li>
-        <li><strong>Strength:</strong> {hero.powerstats?.strength ?? 'N/A'}</li>
-        <li><strong>Speed:</strong> {hero.powerstats?.speed ?? 'N/A'}</li>
+        <li><strong>Intelligence:</strong> {stats.intelligence ?? 'N/A'}</li>
+        <li><strong>Strength:</strong> {stats.strength ?? 'N/A'}</li>
+        <li><strong>Speed:</strong> {stats.speed ?? 'N/A'}</li>
       </ul>
     </div>
   );
