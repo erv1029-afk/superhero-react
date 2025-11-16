@@ -4,7 +4,7 @@ import HeroCard from './HeroCard';
 import Loader from './Loader';
 import Error from './Error';
 
-function HeroList() {
+function HeroList({ setHeroA, setHeroB }) {
   const { state } = useContext(HeroContext);
   const { heroes, loading, error } = state;
 
@@ -19,10 +19,20 @@ function HeroList() {
     );
   }
 
+  
+  const handleSelect = (hero) => {
+    setHeroA((prev) => (prev ? prev : hero));
+    setHeroB((prev) => (prev ? (hero.id !== prev.id ? hero : prev) : hero));
+  };
+
   return (
     <div className="hero-list" aria-label="List of matching superheroes">
       {heroes.map((hero) => (
-        <HeroCard key={hero.id} hero={hero} />
+        <HeroCard
+          key={hero.id}
+          hero={hero}
+          onClick={() => handleSelect(hero)}
+        />
       ))}
     </div>
   );
