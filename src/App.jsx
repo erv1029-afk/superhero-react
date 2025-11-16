@@ -1,32 +1,66 @@
-import SearchBar from './SearchBar';
-import HeroList from './HeroList';
-import { useHeroContext } from '../context/HeroContext';
+import { useState } from 'react';
+import './index.css';
 
-function AppContent() {
-  const { state } = useHeroContext();
-  const { heroList, loading, error } = state;
+function App() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [heroes, setHeroes] = useState([]);
+  const [error, setError] = useState('');
+
+  const handleSearch = () => {
+    // Placeholder logic — replace with actual API call
+    if (!searchTerm.trim()) {
+      setHeroes([]);
+      setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
+    } else {
+      setHeroes([]); // simulate empty result
+      setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
+    }
+  };
 
   return (
     <div className="app-container">
-      <h1 className="app-title">Hero Search Arena</h1>
+      <h1 className="app-title">SUPERHERO SEARCH</h1>
 
-      <SearchBar />
+      <div className="search-bar">
+        <input
+          className="search-input"
+          type="text"
+          placeholder="Search for a hero..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button className="search-button" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
 
-      {loading && <div className="spinner" />}
+      <div className="button-container">
+        <button className="marvel-button">Marvel</button>
+        <button className="dc-button">DC</button>
+        <button className="randomizer-button">Random</button>
+      </div>
 
       {error && <div className="error-message">{error}</div>}
 
-      {!loading && !error && heroList.length === 0 && (
-        <div className="no-results">No heroes to display. Try searching or randomizing!</div>
-      )}
+      <div className="hero-list">
+        {heroes.map((hero) => (
+          <div key={hero.id} className="hero-card">
+            <img src={hero.image} alt={hero.name} className="hero-image" />
+            <div className="hero-name">{hero.name}</div>
+            <div className="hero-stats">
+              <p>Power: {hero.power}</p>
+              <p>Speed: {hero.speed}</p>
+              {/* Add more stats as needed */}
+            </div>
+          </div>
+        ))}
+      </div>
 
-      {!loading && heroList.length > 0 && <HeroList heroes={heroList} />}
-
-      <footer className="app-footer">
-        Built with comic-book flair by Emily ✨
-      </footer>
+      <div className="app-footer">
+        POWERED BY <a href="https://akabab.github.io/superhero-api/">AKABAB SUPERHERO API</a>
+      </div>
     </div>
   );
 }
 
-export default AppContent;
+export default App;
