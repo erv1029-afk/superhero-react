@@ -12,7 +12,6 @@ html, body {
   overflow-x: hidden;
 }
 
-
 .app-container {
   padding: 2rem;
   text-align: center;
@@ -90,6 +89,11 @@ html, body {
   border-color: #ff4081;
 }
 
+.hero-card.selected {
+  border-color: gold;
+  box-shadow: 0 0 15px gold;
+}
+
 .hero-image {
   width: 100%;
   height: auto;
@@ -102,7 +106,6 @@ html, body {
   width: 200px;
   object-fit: contain;
 }
-
 
 .hero-name {
   font-size: 1.5rem;
@@ -163,4 +166,95 @@ html, body {
 .app-footer a {
   color: #ff4081;
   text-decoration: none;
+}
+
+
+.fight-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1a1a1a, #2c0e0e);
+  border: 3px solid crimson;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(255, 64, 129, 0.3);
+}
+
+
+.winner-card {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 3px solid gold;
+  border-radius: 12px;
+  background-color: #1a1a1a;
+  box-shadow: 0 0 20px gold;
+  animation: glowWinner 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glowWinner {
+  from { box-shadow: 0 0 10px gold; }
+  to { box-shadow: 0 0 20px gold; }
+}
+
+.winner-card img {
+  width: 200px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.winner-card h2 {
+  font-size: 2rem;
+  color: gold;
+  text-shadow: 2px 2px #000;
+}
+
+
+.battle-description {
+  font-size: 1.2rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  color: #ffcccb;
+  background-color: #2c0e0e;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 5px solid crimson;
+  box-shadow: 0 0 10px rgba(255, 64, 129, 0.3);
+  font-family: 'Comic Neue', cursive, sans-serif;
+}
+
+
+.fight-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.fight-controls button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  background-color: #ff4081;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 2px #000;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.fight-controls button:hover {
+  transform: scale(1.05);
+  background-color: crimson;
+}
+
+
+.vs-banner {
+  font-size: 2.5rem;
+  color: #ff4081;
+  margin: 1rem 0;
+  text-shadow: 2px 2px #000;
+  animation: pulseVs 1s infinite alternate;
+}
+
+@keyframes pulseVs {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
 }
