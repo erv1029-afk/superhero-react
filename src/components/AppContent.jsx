@@ -3,10 +3,11 @@ import SearchBar from './SearchBar';
 import HeroList from './HeroList';
 import Loader from './Loader';
 import Error from './Error';
+import { useHeroContext } from '../context/HeroContext';
 
 function AppContent() {
   const { state, dispatch } = useHeroContext();
-  const { heroes, loading, error, selectedUniverse, searchTerm } = state;
+  const { heroes, loading, error, selectedUniverse } = state;
 
   return (
     <main className="app-container">
@@ -21,24 +22,19 @@ function AppContent() {
             dispatch({ type: 'SET_UNIVERSE', payload: universe })
           }
         />
-        <SearchBar
-          value={searchTerm}
-          onSearch={(term) =>
-            dispatch({ type: 'SET_SEARCH_TERM', payload: term })
-          }
-        />
-        <button
-          className="randomize-button"
-          onClick={() => dispatch({ type: 'RANDOMIZE_HEROES' })}
-        >
-          🎲 Randomize Heroes
-        </button>
+        <SearchBar />
       </section>
 
       {loading && <Loader />}
       {error && <Error message={error} />}
 
       <HeroList heroes={heroes} />
+
+      <footer className="app-footer">
+        Built with comic-book flair by Emily ✨
+      </footer>
     </main>
   );
 }
+
+export default AppContent;

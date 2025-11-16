@@ -18,34 +18,33 @@ function SearchBar() {
       const allHeroes = await fetchHeroData();
       let filtered = [];
 
-      if (filterType === 'search') {
-        const trimmed = query.trim().toLowerCase();
-        if (!trimmed) return;
-        filtered = allHeroes.filter(hero =>
-          hero.name.toLowerCase().includes(trimmed)
-        );
+      switch (filterType) {
+        case 'search': {
+          const trimmed = query.trim().toLowerCase();
+          if (!trimmed) return;
+          filtered = allHeroes.filter(hero =>
+            hero.name.toLowerCase().includes(trimmed)
+          );
+          break;
+        }
+        case 'marvel':
+          filtered = allHeroes.filter(hero =>
+            hero.publisher?.toLowerCase().includes('marvel')
+          );
+          break;
+        case 'dc':
+          filtered = allHeroes.filter(hero =>
+            hero.publisher?.toLowerCase().includes('dc')
+          );
+          break;
+        case 'random':
+          filtered = [allHeroes[Math.floor(Math.random() * allHeroes.length)]];
+          break;
+        default:
+          break;
       }
 
-      if (filterType === 'marvel') {
-        filtered = allHeroes.filter(hero =>
-          hero.publisher?.toLowerCase().includes('marvel')
-        );
-      }
-
-      if (filterType === 'dc') {
-        filtered = allHeroes.filter(hero =>
-          hero.publisher?.toLowerCase().includes('dc')
-        );
-      }
-
-      if (filterType === 'random') {
-        filtered = [allHeroes[Math.floor(Math.random() * allHeroes.length)]];
-      }
-
-      dispatch({
-        type: 'SET_HERO_LIST',
-        payload: filtered,
-      });
+      dispatch({ type: 'SET_HERO_LIST', payload: filtered });
 
       dispatch({
         type: 'SET_ERROR',
