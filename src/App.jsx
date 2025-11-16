@@ -3,7 +3,8 @@ import { HeroProvider } from './context/HeroContext';
 import SearchBar from './components/SearchBar';
 import HeroList from './components/HeroList';
 import FightArena from './components/FightArena';
-import { simulateFight } from './utils/simulateFight';
+import WinnerCard from './components/WinnerCard';
+import BattleNarration from './components/BattleNarration';
 
 function App() {
   const [heroA, setHeroA] = useState(null);
@@ -12,13 +13,13 @@ function App() {
 
   const handleFight = () => {
     if (heroA && heroB) {
-      const result = simulateFight(heroA, heroB);
-      setFightResult(result);
+      const { winner, description } = simulateFight(heroA, heroB);
+      setFightResult({ winner, description });
     }
   };
 
   const handleRematch = () => {
-    handleFight(); 
+    handleFight();
   };
 
   const handleClear = () => {
@@ -30,31 +31,47 @@ function App() {
   return (
     <HeroProvider>
       <main className="app-container" role="main">
+        
         <header>
           <h1 className="app-title">Superhero Search</h1>
         </header>
 
+        
         <section className="search-section">
           <SearchBar />
         </section>
 
+        
         <section className="results-section">
-          <HeroList setHeroA={setHeroA} setHeroB={setHeroB} />
+          <HeroList
+            setHeroA={setHeroA}
+            setHeroB={setHeroB}
+            heroA={heroA}
+            heroB={heroB}
+          />
         </section>
 
+        
         {heroA && heroB && (
           <section className="fight-section">
-            <FightArena
-              heroA={heroA}
-              heroB={heroB}
-              fightResult={fightResult}
-              onFight={handleFight}
-              onRematch={handleRematch}
-              onClear={handleClear}
-            />
+            {!fightResult ? (
+              <div className="fight-controls">
+                <button onClick={handleFight}>⚔️ Fight!</button>
+              </div>
+            ) : (
+              <>
+                <WinnerCard winner={fightResult.winner} />
+                <BattleNarration description={fightResult.description} />
+                <div className="fight-controls">
+                  <button onClick={handleRematch}>🔁 Rematch</button>
+                  <button onClick={handleClear}>🧹 Clear</button>
+                </div>
+              </>
+            )}
           </section>
         )}
 
+       
         <footer className="app-footer">
           <p>
             Powered by{' '}

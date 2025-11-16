@@ -28,13 +28,17 @@ function SearchBar() {
         hero.name.toLowerCase().includes(trimmedQuery)
       );
 
-      if (results.length) {
-        dispatch({ type: 'FETCH_SUCCESS', payload: results });
-      } else {
-        dispatch({ type: 'FETCH_ERROR', payload: `No heroes found for "${query}".` });
-      }
+      dispatch({
+        type: results.length ? 'FETCH_SUCCESS' : 'FETCH_ERROR',
+        payload: results.length
+          ? results
+          : `No heroes found for "${query}".`,
+      });
     } catch (error) {
-      dispatch({ type: 'FETCH_ERROR', payload: `Search failed: ${error.message}` });
+      dispatch({
+        type: 'FETCH_ERROR',
+        payload: `Search failed: ${error.message}`,
+      });
     }
   };
 
@@ -53,6 +57,7 @@ function SearchBar() {
         className="search-button"
         onClick={handleSearch}
         disabled={!query.trim()}
+        aria-label="Search for matching heroes"
       >
         Search
       </button>
