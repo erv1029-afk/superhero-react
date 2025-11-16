@@ -6,14 +6,26 @@ function App() {
   const [heroes, setHeroes] = useState([]);
   const [error, setError] = useState('');
 
-  const handleSearch = () => {
-    // Placeholder logic — replace with actual API call
+  const handleSearch = async () => {
     if (!searchTerm.trim()) {
       setHeroes([]);
       setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
-    } else {
-      setHeroes([]); // simulate empty result
-      setError('NO HEROES FOUND. TRY A DIFFERENT SEARCH!');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://akabab.github.io/superhero-api/api/all.json');
+      const data = await response.json();
+
+      const filtered = data.filter(hero =>
+        hero.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      setHeroes(filtered);
+      setError(filtered.length === 0 ? 'NO HEROES FOUND. TRY A DIFFERENT SEARCH!' : '');
+    } catch (err) {
+      setHeroes([]);
+      setError('Something went wrong. Please try again.');
     }
   };
 
@@ -45,12 +57,13 @@ function App() {
       <div className="hero-list">
         {heroes.map((hero) => (
           <div key={hero.id} className="hero-card">
-            <img src={hero.image} alt={hero.name} className="hero-image" />
+            <img src={hero.images.md} alt={hero.name} className="hero-image" />
             <div className="hero-name">{hero.name}</div>
             <div className="hero-stats">
-              <p>Power: {hero.power}</p>
-              <p>Speed: {hero.speed}</p>
-              {/* Add more stats as needed */}
+              <p>Power: {hero.powerstats.power}</p>
+              <p>Speed: {hero.powerstats.speed}</p>
+              <p>Strength: {hero.powerstats.strength}</p>
+              <p>Intelligence: {hero.powerstats.intelligence}</p>
             </div>
           </div>
         ))}
