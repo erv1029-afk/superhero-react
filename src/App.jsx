@@ -1,70 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { HeroProvider } from './context/HeroContext';
 import SearchBar from './components/SearchBar';
 import HeroList from './components/HeroList';
 import FightArena from './components/FightArena';
+import BattleNarration from './components/BattleNarration';
+import WinnerCard from './components/WinnerCard';
+import { useHeroContext } from './context/HeroContext';
 
-function App() {
-  const [heroA, setHeroA] = useState(null);
-  const [heroB, setHeroB] = useState(null);
+function AppContent() {
+  const { state, dispatch } = useHeroContext();
+  const { hero1, hero2, winner, narration } = state;
 
-  // 🧹 Clear both selected heroes
   const handleClear = () => {
-    setHeroA(null);
-    setHeroB(null);
+    dispatch({ type: 'RESET' });
   };
 
-  // 🧠 Debug: log selected heroes on change
-  useEffect(() => {
-    console.log('Hero A:', heroA?.name);
-    console.log('Hero B:', heroB?.name);
-  }, [heroA, heroB]);
-
   return (
-    <HeroProvider>
-      <main className="app-container" role="main">
-        <header>
-          <h1 className="app-title">Superhero Search</h1>
-        </header>
+    <main className="app-container" role="main">
+      <header>
+        <h1 className="app-title">Superhero Showdown</h1>
+      </header>
 
-        <section className="search-section" aria-label="Search for superheroes">
-          <SearchBar />
+      <section className="search-section" aria-label="Search for superheroes">
+        <SearchBar />
+      </section>
+
+      <section className="results-section" aria-label="Search results">
+        <HeroList
+          heroA={hero1}
+          heroB={hero2}
+          setHeroA={(hero) => dispatch({ type: 'SET_HERO_1', payload: hero })}
+          setHeroB={(hero) => dispatch({ type: 'SET_HERO_2', payload: hero })}
+        />
+      </section>
+
+      {(hero1 && hero2) && (
+        <section className="fight-section" aria-label="Fight arena">
+          <FightArena />
+          <BattleNarration description={narration} />
+          <WinnerCard hero={winner} />
+          <button onClick={handleClear} className="clear-button">
+            🔄 Rematch
+          </button>
         </section>
+      )}
 
-        <section className="results-section" aria-label="Search results">
-          <HeroList
-            setHeroA={setHeroA}
-            setHeroB={setHeroB}
-            heroA={heroA}
-            heroB={heroB}
-          />
-        </section>
-
-        {(heroA || heroB) && (
-          <section className="fight-section" aria-label="Fight arena">
-            <FightArena
-              heroA={heroA}
-              heroB={heroB}
-              onClear={handleClear}
-            />
-          </section>
-        )}
-
-        <footer className="app-footer">
-          <p>
-            Powered by{' '}
-            <a
-              href="https://akabab.github.io/superhero-api/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Akabab Superhero API
-            </a>
-          </p>
-        </footer>
-      </main>
-    </HeroProvider>
+      <footer className="app-footer">
+        <p>
+          Powered by{' '}
+          <a
+            href="https://akabab.github.io/superhero-api/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Akabab Superhero API
+          </a>
+        </p>
+      </footer>
+    </main>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <HeroProvider>
+      <AppContent />
+    </HeroProvider>
+  );
+}
