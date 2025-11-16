@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { simulateFight } from '../utils/simulateFight';
 import BattleNarration from './BattleNarration';
 
 const fallbackHero = {
   name: 'Unknown Hero',
-  image: { url: '/images/default_superhero.jpg' },
+  images: { md: '/images/default_superhero.jpg' }, 
 };
 
 const FightArena = ({ heroA, heroB, onClear }) => {
   const [result, setResult] = useState(null);
+  const [canFight, setCanFight] = useState(false);
+
+  // ✅ Check if both heroes are valid and have image paths
+  useEffect(() => {
+    const validA = heroA?.images?.md;
+    const validB = heroB?.images?.md;
+    setCanFight(Boolean(validA && validB));
+  }, [heroA, heroB]);
 
   const handleFight = () => {
-    if (!heroA || !heroB) {
-      console.warn('Both heroes must be selected before fighting.');
+    if (!canFight) {
+      console.warn('Both heroes must be selected and valid before fighting.');
       return;
     }
 
@@ -25,11 +33,19 @@ const FightArena = ({ heroA, heroB, onClear }) => {
   };
 
   const winner = result?.winner || fallbackHero;
+  const winnerImage = winner?.images?.md || fallbackHero.images.md;
 
   return (
     <div className="fight-arena">
-      {/* 🆚 Fight Button */}
+      {/* 🆚 VS Banner */}
       {heroA && heroB && !result && (
+        <div className="vs-banner">
+          <h2>{heroA.name} 💥 VS 💥 {heroB.name}</h2>
+        </div>
+      )}
+
+      {/* ⚔️ Fight Button */}
+      {canFight && !result && (
         <div className="fight-controls">
           <button onClick={handleFight}>⚔️ Fight!</button>
         </div>
@@ -41,7 +57,7 @@ const FightArena = ({ heroA, heroB, onClear }) => {
           <div className="winner-card">
             <h2>🏆 {winner.name} wins!</h2>
             <img
-              src={winner.image?.url || '/images/default_superhero.jpg'}
+              src={winnerImage}
               alt={winner.name || 'Unknown Hero'}
             />
           </div>
