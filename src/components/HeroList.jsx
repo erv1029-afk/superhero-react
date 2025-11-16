@@ -11,9 +11,14 @@ function HeroList({ setHeroA, setHeroB, heroA, heroB }) {
   const handleSelect = (hero) => {
     if (!heroA) {
       setHeroA(hero);
-    } else if (!heroB && hero?.id !== heroA?.id) {
+    } else if (!heroB && hero.id !== heroA.id) {
       setHeroB(hero);
     }
+  };
+
+  const handleClearSelection = () => {
+    setHeroA(null);
+    setHeroB(null);
   };
 
   if (loading) return <Loader />;
@@ -34,14 +39,29 @@ function HeroList({ setHeroA, setHeroB, heroA, heroB }) {
       aria-live="polite"
     >
       <h2 className="sr-only">Search Results</h2>
-      {heroes.map((hero) => (
-        <HeroCard
-          key={hero?.id}
-          hero={hero}
-          onClick={() => handleSelect(hero)}
-          isSelected={hero?.id === heroA?.id || hero?.id === heroB?.id}
-        />
-      ))}
+
+      {/* 🧹 Clear Button */}
+      {(heroA || heroB) && (
+        <div className="selection-controls">
+          <button onClick={handleClearSelection} aria-label="Clear selected heroes">
+            🧹 Clear Selection
+          </button>
+        </div>
+      )}
+
+      {/* 🦸 Hero Cards */}
+      {heroes.map((hero) => {
+        const isSelected = hero.id === heroA?.id || hero.id === heroB?.id;
+
+        return (
+          <HeroCard
+            key={hero.id}
+            hero={hero}
+            onClick={() => handleSelect(hero)}
+            isSelected={isSelected}
+          />
+        );
+      })}
     </section>
   );
 }
