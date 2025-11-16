@@ -1,14 +1,9 @@
 import { createContext, useReducer, useContext } from 'react';
-import { simulateFight } from '../utils/simulateFight';
 
 const HeroContext = createContext();
 
 const initialState = {
-  heroes: [],
-  hero1: null,
-  hero2: null,
-  winner: null,
-  narration: '',
+  heroList: [],
   loading: false,
   error: '',
 };
@@ -16,15 +11,7 @@ const initialState = {
 function heroReducer(state, action) {
   switch (action.type) {
     case 'SET_HERO_LIST':
-      return { ...state, heroes: action.payload };
-    case 'SET_HERO_1':
-      return { ...state, hero1: action.payload, hero2: null, winner: null, narration: '' };
-    case 'SET_HERO_2':
-      return { ...state, hero2: action.payload };
-    case 'CALCULATE_WINNER': {
-      const { winner, description } = simulateFight(state.hero1, state.hero2);
-      return { ...state, winner, narration: description };
-    }
+      return { ...state, heroList: action.payload };
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
     case 'SET_ERROR':

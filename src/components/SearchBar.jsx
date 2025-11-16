@@ -18,46 +18,54 @@ function SearchBar() {
       const allHeroes = await fetchHeroData();
       let filtered = [];
 
-      switch (filterType) {
-        case 'search':
-          {
-            const trimmed = query.trim().toLowerCase();
-            if (!trimmed) return;
-            filtered = allHeroes.filter(hero =>
-              hero.name.toLowerCase().includes(trimmed)
-            );
-          }
-          break;
-        case 'marvel':
-          filtered = allHeroes.filter(hero => hero.publisher?.includes('Marvel'));
-          break;
-        case 'dc':
-          filtered = allHeroes.filter(hero => hero.publisher?.includes('DC'));
-          break;
-        case 'random':
-          filtered = [allHeroes[Math.floor(Math.random() * allHeroes.length)]];
-          break;
-        default:
-          break;
+      if (filterType === 'search') {
+        const trimmed = query.trim().toLowerCase();
+        if (!trimmed) return;
+        filtered = allHeroes.filter(hero =>
+          hero.name.toLowerCase().includes(trimmed)
+        );
       }
 
-      if (filtered.length) {
-        dispatch({ type: 'SET_HERO_LIST', payload: filtered });
-        dispatch({ type: 'SET_ERROR', payload: '' });
-      } else {
-        dispatch({ type: 'SET_HERO_LIST', payload: [] });
-        dispatch({
-          type: 'SET_ERROR',
-          payload: filterType === 'search'
+      if (filterType === 'marvel') {
+        filtered = allHeroes.filter(hero =>
+          hero.publisher?.toLowerCase().includes('marvel')
+        );
+      }
+
+      if (filterType === 'dc') {
+        filtered = allHeroes.filter(hero =>
+          hero.publisher?.toLowerCase().includes('dc')
+        );
+      }
+
+      if (filterType === 'random') {
+        filtered = [allHeroes[Math.floor(Math.random() * allHeroes.length)]];
+      }
+
+      dispatch({
+        type: 'SET_HERO_LIST',
+        payload: filtered,
+      });
+
+      dispatch({
+        type: 'SET_ERROR',
+        payload: filtered.length
+          ? ''
+          : filterType === 'search'
             ? `No heroes found for "${query}".`
             : 'No matching heroes found.',
-        });
-      }
+      });
     } catch (err) {
       dispatch({ type: 'SET_ERROR', payload: `Search failed: ${err.message}` });
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
+  };
+
+  const handleClear = () => {
+    setQuery('');
+    dispatch({ type: 'SET_HERO_LIST', payload: [] });
+    dispatch({ type: 'SET_ERROR', payload: '' });
   };
 
   return (
@@ -99,6 +107,13 @@ function SearchBar() {
         aria-label="Show a random hero"
       >
         Randomizer
+      </button>
+      <button
+        onClick={handleClear}
+        className="clear-button"
+        aria-label="Clear search and hero list"
+      >
+        Clear
       </button>
     </div>
   );
